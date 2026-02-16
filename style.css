@@ -1,0 +1,1577 @@
+/* Сброс отступов и настройка на весь экран */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+
+ 
+html, body {
+    width: 100%;
+    min-height: 100vh;
+    background-color: black; /* Фон на случай, если фото не загрузятся */
+}
+
+/* Галерея занимает всю ширину */
+.gallery {
+    display: flex;
+    flex-direction: column; /* Шесть фото вертикально (одно под другим) */
+    width: 100%;
+    min-height: 100vh;
+    gap: 0;
+}
+
+.photo-container img[src$=".PNG"],
+.photo-container img[src$=".png"] {
+    background-color: transparent; /* или другой цвет по желанию */
+}
+
+
+
+
+/* Контейнер для каждого фото */
+.photo-container {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    
+}
+
+/* Сами фотографии */
+.photo {
+    display: block;
+    width: 100%;        /* Растягиваем на всю ширину экрана */
+    height: auto;       /* Высота сохраняет пропорции */
+    object-fit: contain; /* Вписываем без обрезки */
+    background-color: #111; /* Фон для фото с прозрачностью (PNG) */
+}
+
+/* Контейнер для пятого фото с таймером */
+.timer-container {
+    position: relative;
+    width: 100%;
+}
+
+/* Таймер поверх фото */
+.timer-overlay {
+    position: absolute;
+    top: 64%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: #3c373b;
+    font-size: 8vw;           /* Немного уменьшил, чтобы поместились подписи */
+    font-weight: 100;          /* Толщина 100 (самое тонкое, что есть) */
+    font-family: 'Didot', 'Bodoni', 'Georgia', 'Times New Roman', serif;
+    z-index: 10;
+    pointer-events: none;
+    background: transparent;
+    text-align: center;
+    text-shadow: none;
+    -webkit-font-smoothing: antialiased; /* Максимальное сглаживание */
+    -moz-osx-font-smoothing: grayscale;
+    opacity: 0.7;
+    display: flex;
+    gap: 8vw;
+    flex-wrap: wrap;
+    justify-content: center;
+    width: 90%;
+    max-width: 1200px;
+}
+
+.time-unit {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-width: 80px; /* Увеличена минимальная ширина */
+    padding: 0 2vw;  /* Добавлены внутренние отступы по бокам */
+}
+
+/* Стиль для цифр */
+.time-number {
+    font-size: 1em;
+    line-height: 1.2;
+    font-weight: 100;
+    color: #3c373b;
+}
+
+/* Стиль для подписи (д, ч, м, с) */
+.time-label {
+    font-size: 0.35em;        /* Маленький текст под цифрами */
+    letter-spacing: 0.2em;     /* Разреженные буквы */
+    text-transform: lowercase;
+    margin-top: 0.3em;
+    opacity: 0.8;
+    font-weight: 100;
+    color: #3c373b;
+}
+
+/* Адаптация для очень маленьких экранов */
+@media (max-width: 400px) {
+    .timer-overlay {
+        font-size: 10vw;
+        gap: 1vw;
+    }
+    
+    .time-unit {
+        min-width: 40px;
+    }
+}
+
+/* Стили для секции ЛОКАЦИЯ */
+.location-section {
+    width: 100%;
+    background-color: white;
+    padding: 50px 25px 70px; /* Увеличен нижний отступ для кнопки */
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    box-sizing: border-box;
+    font-family: 'Didot', 'Bodoni', 'Georgia', 'Times New Roman', serif;
+}
+
+/* Контейнер для фото-заголовка */
+.location-title-photo {
+    width: 100%;
+    text-align: center;
+    margin-bottom: 35px;
+}
+
+/* Само фото заголовка */
+.location-title-img {
+    max-width: 80%;
+    height: auto;
+    display: inline-block;
+}
+
+.location-address {
+    font-size: 24px;
+    font-weight: 250;
+    line-height: 1.5;
+    margin-bottom: 15px;
+    color: #3c373b;
+    text-align: left;
+}
+
+.location-time {
+    font-size: 22px;
+    font-weight: 200;
+    color: #3c373b;
+    opacity: 0.6;
+    margin-bottom: 35px;
+    text-align: left;
+}
+
+/* Контейнер для фото с кнопкой */
+.location-photo-wrapper {
+    position: relative;
+    width: 100%;
+    margin-top: 10px;
+    margin-bottom: 20px;
+}
+
+.location-photo {
+    width: 100%;
+    height: auto;
+    display: block;
+    background-color: white;
+}
+
+/* Кнопка-круг "как добраться" */
+.location-button {
+    position: absolute;
+    bottom: -45px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 110px;
+    height: 110px;
+    background-color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: flex-start; /* Текст прижимается к верху */
+    justify-content: center;
+    text-align: center;
+    color: #3c373b;
+    font-family: 'Didot', 'Bodoni', 'Georgia', 'Times New Roman', serif;
+    font-size: 16px;
+    font-weight: 400;
+    letter-spacing: 1px;
+    text-transform: lowercase;
+    text-decoration: none;
+    cursor: pointer;
+    border: 2px solid #3c373b;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+    z-index: 20;
+    transition: transform 0.2s, box-shadow 0.2s, background-color 0.2s;
+    line-height: 1.3;
+    padding: 10px 10px 0; /* Увеличин верхний отступ для поднятия текста */
+    
+}
+
+/* Эффект при нажатии/наведении */
+.location-button:hover,
+.location-button:active {
+    transform: translateX(-50%) scale(1.05);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+    background-color: #f8f8f8;
+}
+
+/* Текст в две строки */
+.location-button span {
+    display: block;
+    align-items: flex-start; /* Текст прижимается к верху */
+    padding-top: 12px; /* Увеличить отступ сверху */
+}
+
+/* Стили для секции ТАЙМИНГ */
+.timing-section {
+    width: 100%;
+    background-image: url('44.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    padding: 60px 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+    font-family: 'Didot', 'Bodoni', 'Georgia', 'Times New Roman', serif;
+    position: relative;
+}
+
+/* Затемнение фона для лучшей читаемости текста */
+.timing-section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(255, 255, 255, 0); /* Белое полупрозрачное затемнение */
+    z-index: 1;
+}
+
+/* Чтобы контент был поверх затемнения */
+.timing-section > * {
+    position: relative;
+    z-index: 2;
+}
+
+.timing-title {
+    font-size: 42px;
+    font-weight: 300;
+    letter-spacing: 6px;
+    margin-bottom: 50px;
+    color: #3c373b;
+    text-align: center;
+    text-transform: uppercase;
+    width: 100%;
+}
+
+.timing-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 40px;
+    width: 100%;
+    max-width: 400px;
+}
+
+.timing-item:last-child {
+    margin-bottom: 0;
+}
+
+.timing-icon {
+    width: 120px;
+    height: 120px;
+    object-fit: contain;
+    margin-bottom: 15px;
+    background-color: transparent;
+}
+
+.timing-text {
+    font-size: 24px;
+    font-weight: 250;
+    color: #3c373b;
+    text-align: center;
+    letter-spacing: 1px;
+}
+
+/* Адаптация для маленьких экранов */
+@media (max-width: 600px) {
+    .location-section {
+        padding: 40px 20px 65px;
+    }
+    
+    .location-title-photo {
+        margin-bottom: 30px;
+    }
+    
+    .location-address {
+        font-size: 20px;
+    }
+    
+    .location-time {
+        font-size: 18px;
+        margin-bottom: 30px;
+    }
+    
+    .location-button {
+        width: 100px;
+        height: 100px;
+        font-size: 15px;
+        bottom: -40px;
+        padding: 12px 8px 0;
+    }
+    
+    /* Тайминг секция адаптация */
+    .timing-section {
+        padding: 40px 15px;
+    }
+    
+    .timing-title {
+        font-size: 36px;
+        letter-spacing: 4px;
+        margin-bottom: 40px;
+    }
+    
+    .timing-icon {
+        width: 100px;
+        height: 100px;
+    }
+    
+    .timing-text {
+        font-size: 20px;
+    }
+    
+    .timing-item {
+        margin-bottom: 35px;
+    }
+}
+
+@media (max-width: 400px) {
+    .location-section {
+        padding: 30px 15px 55px;
+    }
+    
+    .location-button {
+        width: 90px;
+        height: 90px;
+        font-size: 13px;
+        bottom: -35px;
+        padding: 10px 5px 0;
+    }
+    
+    /* Тайминг секция адаптация */
+    .timing-section {
+        padding: 30px 10px;
+    }
+    
+    .timing-title {
+        font-size: 30px;
+        letter-spacing: 3px;
+        margin-bottom: 30px;
+    }
+    
+    .timing-icon {
+        width: 80px;
+        height: 80px;
+    }
+    
+    .timing-text {
+        font-size: 18px;
+    }
+    
+    .timing-item {
+        margin-bottom: 30px;
+    }
+}
+
+@media (max-width: 320px) {
+    .location-button {
+        width: 80px;
+        height: 80px;
+        font-size: 12px;
+        bottom: -30px;
+        padding: 8px 5px 0;
+    }
+}
+
+/* Стили для секции ПОЖЕЛАНИЯ */
+.wishes-section {
+    width: 100%;
+    background-color: #ffffff; /* Белый фон */
+    padding: 60px 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+    font-family: 'Didot', 'Bodoni', 'Georgia', 'Times New Roman', serif;
+}
+
+.wishes-title {
+    font-size: 42px;
+    font-weight: 300;
+    letter-spacing: 6px;
+    margin-bottom: 40px;
+    color: #3c373b;
+    text-align: center;
+    text-transform: uppercase;
+    width: 100%;
+}
+
+.wishes-slider {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    max-width: 800px;
+    gap: 10px;
+    position: relative;
+}
+
+.wish-container {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 0 5px;
+}
+
+.wish-text {
+    font-size: 22px;
+    font-weight: 250;
+    line-height: 1.6;
+    color: #3c373b;
+    margin-bottom: 25px;
+    min-height: 140px;
+    display: flex;
+    align-items: center;
+    transition: opacity 0.3s ease;
+}
+
+.wish-counter {
+    font-size: 18px;
+    font-weight: 200;
+    color: #3c373b;
+    opacity: 0.7;
+    letter-spacing: 1px;
+}
+
+.wish-arrow {
+    background: none;
+    border: none; /* Убираем обводку */
+    color: #3c373b;
+    width: auto; /* Убираем фиксированную ширину */
+    height: auto; /* Убираем фиксированную высоту */
+    font-size: 48px; /* Увеличиваем размер стрелок */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    flex-shrink: 0;
+    line-height: 1;
+    padding: 10px 15px; /* Добавляем область для нажатия */
+    opacity: 0.7;
+}
+
+.wish-arrow:hover {
+    opacity: 1;
+    transform: scale(1.2);
+}
+
+.wish-arrow:active {
+    transform: scale(0.95);
+}
+
+.wish-arrow:disabled {
+    opacity: 0.2;
+    cursor: not-allowed;
+    pointer-events: none;
+}
+
+/* Адаптация для маленьких экранов */
+@media (max-width: 600px) {
+    .wishes-section {
+        padding: 40px 15px;
+    }
+    
+    .wishes-title {
+        font-size: 36px;
+        letter-spacing: 4px;
+        margin-bottom: 30px;
+    }
+    
+    .wish-text {
+        font-size: 18px;
+        min-height: 160px;
+    }
+    
+    .wish-arrow {
+        font-size: 42px;
+        padding: 8px 12px;
+    }
+    
+    .wishes-slider {
+        gap: 5px;
+    }
+}
+
+@media (max-width: 400px) {
+    .wishes-section {
+        padding: 30px 10px;
+    }
+    
+    .wishes-title {
+        font-size: 30px;
+        letter-spacing: 3px;
+        margin-bottom: 25px;
+    }
+    
+    .wish-text {
+        font-size: 16px;
+        min-height: 180px;
+        margin-bottom: 20px;
+    }
+    
+    .wish-arrow {
+        font-size: 36px;
+        padding: 5px 10px;
+    }
+    
+    .wish-counter {
+        font-size: 16px;
+    }
+}
+
+@media (max-width: 320px) {
+    .wish-text {
+        font-size: 15px;
+        min-height: 200px;
+    }
+    
+    .wish-arrow {
+        font-size: 32px;
+        padding: 5px 8px;
+    }
+}
+
+/* Стили для кнопки списка подарков */
+.gift-button {
+    display: block;
+    width: 90%;
+    max-width: 600px;
+    margin: 50px auto 20px;
+    padding: 25px 30px;
+    background-color: #ffffff;
+    border: 2px solid #3c373b;
+    border-radius: 100px; /* Овальная форма */
+    color: #3c373b;
+    font-family: 'Didot', 'Bodoni', 'Georgia', 'Times New Roman', serif;
+    font-size: 24px;
+    font-weight: 300;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.gift-button:hover,
+.gift-button:active {
+    background-color: #3c373b;
+    color: #ffffff;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(60, 55, 59, 0.3);
+}
+
+/* Стили для модального окна */
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
+    z-index: 1000;
+    overflow-y: auto;
+    backdrop-filter: blur(5px);
+}
+
+.modal.show {
+    display: block;
+}
+
+.modal-content {
+    position: relative;
+    background-color: #ffffff;
+    margin: 30px auto;
+    padding: 0;
+    width: 90%;
+    max-width: 700px;
+    border-radius: 30px;
+    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.3);
+    animation: modalSlideIn 0.4s ease;
+}
+
+@keyframes modalSlideIn {
+    from {
+        transform: translateY(-50px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 25px 30px;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.modal-title {
+    font-family: 'Didot', 'Bodoni', 'Georgia', 'Times New Roman', serif;
+    font-size: 28px;
+    font-weight: 300;
+    letter-spacing: 4px;
+    color: #3c373b;
+    margin: 0;
+}
+
+.modal-close {
+    background: none;
+    border: none;
+    font-size: 40px;
+    line-height: 1;
+    color: #3c373b;
+    cursor: pointer;
+    padding: 0;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+}
+
+.modal-close:hover {
+    transform: scale(1.2);
+    color: #000;
+}
+
+.modal-body {
+    padding: 30px;
+    max-height: 60vh;
+    overflow-y: auto;
+}
+
+/* Упрощенные стили для списка подарков (без категорий) */
+.gift-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.gift-item {
+    padding: 18px 0;
+    border-bottom: 1px solid #f0f0f0;
+    font-family: 'Didot', 'Bodoni', 'Georgia', 'Times New Roman', serif;
+    font-size: 20px;
+    font-weight: 250;
+    color: #3c373b;
+    text-align: left;
+    line-height: 1.4;
+}
+
+.gift-item:last-child {
+    border-bottom: none;
+}
+
+/* Адаптация для мобильных устройств */
+@media (max-width: 600px) {
+    .gift-button {
+        width: 95%;
+        padding: 30px 40px;
+        font-size: 20px;
+        letter-spacing: 3px;
+        margin: 40px auto 15px;
+        border-radius: 100px !important;
+    }
+    
+    .modal-content {
+        margin: 15px auto;
+        width: 95%;
+    }
+    
+    .modal-header {
+        padding: 20px 25px;
+    }
+    
+    .modal-title {
+        font-size: 24px;
+        letter-spacing: 3px;
+    }
+    
+    .modal-close {
+        font-size: 36px;
+    }
+    
+    .modal-body {
+        padding: 20px;
+    }
+    
+    .gift-item {
+        padding: 15px 0;
+        font-size: 18px;
+    }
+}
+
+@media (max-width: 400px) {
+    .gift-button {
+        padding: 18px 20px;
+        font-size: 18px;
+        letter-spacing: 2px;
+    }
+    
+    .modal-title {
+        font-size: 20px;
+        letter-spacing: 2px;
+    }
+    
+    .gift-item {
+        padding: 12px 0;
+        font-size: 16px;
+    }
+}
+
+/* Стили для секции КОНТАКТЫ */
+.contacts-section {
+    width: 100%;
+    background-color: #ffffff;
+    padding: 60px 20px 70px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+    font-family: 'Didot', 'Bodoni', 'Georgia', 'Times New Roman', serif;
+}
+
+.contacts-title {
+    font-size: 42px;
+    font-weight: 300;
+    letter-spacing: 6px;
+    margin-bottom: 30px;
+    color: #3c373b;
+    text-align: center;
+    text-transform: uppercase;
+    width: 100%;
+}
+
+.contacts-description {
+    font-size: 18px;
+    font-weight: 250;
+    line-height: 1.5;
+    color: #3c373b;
+    text-align: center;
+    margin-bottom: 40px;
+    max-width: 500px;
+    opacity: 0.8;
+}
+
+.contacts-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    max-width: 600px;
+    margin-bottom: 20px;
+    background-color: #f9f9f9;
+    padding: 20px 25px;
+    border-radius: 20px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.03);
+}
+
+.contact-info {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+}
+
+.contact-name {
+    font-size: 28px;
+    font-weight: 300;
+    color: #3c373b;
+    margin-bottom: 8px;
+    line-height: 1.2;
+}
+
+.contact-phone {
+    font-size: 22px;
+    font-weight: 250;
+    color: #3c373b;
+    text-decoration: none;
+    opacity: 0.8;
+    transition: opacity 0.2s;
+    display: inline-block;
+}
+
+.contact-phone:hover {
+    opacity: 1;
+}
+
+.contact-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 140px;
+    height: 140px;
+    background-color: #ffffff;
+    border: 2px solid #3c373b;
+    border-radius: 50%;
+    color: #3c373b;
+    font-family: 'Didot', 'Bodoni', 'Georgia', 'Times New Roman', serif;
+    font-size: 11px !important;
+    font-weight: 400;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    text-decoration: none;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+    line-height: 1.2; /* Уменьшена для лучшего контроля */
+    flex-shrink: 0;
+    margin-left: 15px;
+    /* Добавленные свойства для точного центрирования */
+    padding: 0; /* Убираем все внутренние отступы */
+    box-sizing: border-box;
+    text-indent: 0; /* Убираем отступ текста */
+    word-break: break-word; /* Перенос слов при необходимости */
+}
+
+
+.contact-button:hover,
+.contact-button:active {
+    background-color: #3c373b;
+    color: #ffffff;
+    transform: scale(1.05);
+    box-shadow: 0 8px 25px rgba(60, 55, 59, 0.2);
+}
+
+
+.contact-button span {
+    display: block;
+    max-width: 100px; /* Ограничиваем ширину текста */
+    margin: 0 auto; /* Центрируем блок с текстом */
+    transform: translateX(0); /* Сброс возможных трансформаций */
+}
+
+/* Адаптация для мобильных устройств */
+@media (max-width: 600px) {
+    .contacts-section {
+        padding: 50px 15px 60px;
+    }
+    
+    .contacts-title {
+        font-size: 36px;
+        letter-spacing: 4px;
+        margin-bottom: 25px;
+    }
+    
+    .contacts-description {
+        font-size: 16px;
+        margin-bottom: 30px;
+        padding: 0 10px;
+    }
+    
+    .contacts-wrapper {
+        padding: 15px 20px;
+    }
+    
+    .contact-name {
+        font-size: 24px;
+    }
+    
+    .contact-phone {
+        font-size: 18px;
+    }
+    
+    .contact-button {
+        width: 120px;
+        height: 120px;
+        font-size: 16px;
+        letter-spacing: 1.5px;
+    }
+
+    .contact-button span {
+        max-width: 90px;
+    }
+}
+
+@media (max-width: 400px) {
+    .contacts-section {
+        padding: 40px 12px 50px;
+    }
+    
+    .contacts-title {
+        font-size: 30px;
+        letter-spacing: 3px;
+        margin-bottom: 20px;
+    }
+    
+    .contacts-description {
+        font-size: 15px;
+        margin-bottom: 25px;
+    }
+    
+    .contacts-wrapper {
+        padding: 12px 15px;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+    
+    .contact-info {
+        width: 100%;
+        text-align: center;
+        margin-bottom: 15px;
+    }
+    
+    .contact-name {
+        font-size: 24px;
+    }
+    
+    .contact-phone {
+        font-size: 18px;
+    }
+    
+    .contact-button {
+        width: 110px;
+        height: 110px;
+        font-size: 16px;
+    }
+
+    .contact-button span {
+        max-width: 80px;
+    }
+}
+
+@media (max-width: 320px) {
+    .contact-button {
+        width: 100px;
+        height: 100px;
+        font-size: 15px;
+    }
+    
+    .contact-button span {
+        max-width: 75px;
+    }
+}
+
+/* Стили для секции АНКЕТА ГОСТЯ */
+.guest-section {
+    width: 100%;
+    background-color: #ffffff;
+    padding: 60px 20px 80px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+    font-family: 'Didot', 'Bodoni', 'Georgia', 'Times New Roman', serif;
+
+    background-image: url('44.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    position: relative;
+}
+
+.guest-title {
+    font-size: 42px;
+    font-weight: 300;
+    letter-spacing: 6px;
+    margin-bottom: 30px;
+    color: #3c373b;
+    text-align: center;
+    text-transform: uppercase;
+    width: 100%;
+}
+
+.guest-description {
+    font-size: 20px;
+    font-weight: 250;
+    line-height: 1.5;
+    color: #3c373b;
+    text-align: center;
+    margin-bottom: 30px;
+    max-width: 500px;
+    opacity: 0.8;
+}
+
+.guest-date {
+    font-size: 64px;
+    font-weight: 300;
+    color: #3c373b;
+    text-align: center;
+    margin-bottom: 50px;
+    letter-spacing: 8px;
+    line-height: 1.2;
+    text-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+}
+
+.guest-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 160px;
+    height: 160px;
+    background-color: #ffffff;
+    border: 2px solid #3c373b;
+    border-radius: 50%;
+    color: #3c373b;
+    font-family: 'Didot', 'Bodoni', 'Georgia', 'Times New Roman', serif;
+    font-size: 12px !important;
+    font-weight: 400;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    text-decoration: none;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    line-height: 1.2;
+    padding: 0;
+    box-sizing: border-box;
+    margin: 0 auto;
+}
+
+.guest-button:hover,
+.guest-button:active {
+    background-color: #3c373b;
+    color: #ffffff;
+    transform: scale(1.05);
+    box-shadow: 0 8px 30px rgba(60, 55, 59, 0.3);
+}
+
+.guest-button span {
+    display: block;
+    white-space: nowrap;
+    max-width: 120px;
+}
+
+/* Адаптация для мобильных устройств */
+@media (max-width: 600px) {
+    .guest-section {
+        padding: 50px 15px 70px;
+    }
+    
+    .guest-title {
+        font-size: 36px;
+        letter-spacing: 4px;
+        margin-bottom: 25px;
+    }
+    
+    .guest-description {
+        font-size: 18px;
+        margin-bottom: 25px;
+        padding: 0 10px;
+    }
+    
+    .guest-date {
+        font-size: 52px;
+        letter-spacing: 6px;
+        margin-bottom: 40px;
+    }
+    
+    .guest-button {
+        width: 150px;
+        height: 150px;
+        font-size: 17px;
+        letter-spacing: 2.5px;
+    }
+}
+
+@media (max-width: 400px) {
+    .guest-section {
+        padding: 40px 12px 60px;
+    }
+    
+    .guest-title {
+        font-size: 30px;
+        letter-spacing: 3px;
+        margin-bottom: 20px;
+    }
+    
+    .guest-description {
+        font-size: 16px;
+        margin-bottom: 20px;
+    }
+    
+    .guest-date {
+        font-size: 42px;
+        letter-spacing: 4px;
+        margin-bottom: 35px;
+    }
+    
+    .guest-button {
+        width: 140px;
+        height: 140px;
+        font-size: 16px;
+        letter-spacing: 2px;
+    }
+}
+
+@media (max-width: 320px) {
+    .guest-date {
+        font-size: 36px;
+        letter-spacing: 3px;
+    }
+    
+    .guest-button {
+        width: 130px;
+        height: 130px;
+        font-size: 15px;
+    }
+}
+
+
+/* Стили для модального окна анкеты */
+.guest-modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
+    z-index: 2000;
+    overflow-y: auto;
+    backdrop-filter: blur(5px);
+}
+
+.guest-modal.show {
+    display: block;
+}
+
+.guest-modal-content {
+    position: relative;
+    background-color: #ffffff;
+    margin: 30px auto;
+    padding: 0;
+    width: 90%;
+    max-width: 600px;
+    border-radius: 30px;
+    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.3);
+    animation: guestModalSlideIn 0.4s ease;
+}
+
+@keyframes guestModalSlideIn {
+    from {
+        transform: translateY(-50px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+.guest-modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 25px 30px;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.guest-modal-title {
+    font-family: 'Didot', 'Bodoni', 'Georgia', 'Times New Roman', serif;
+    font-size: 28px;
+    font-weight: 300;
+    letter-spacing: 4px;
+    color: #3c373b;
+    margin: 0;
+}
+
+.guest-modal-close {
+    background: none;
+    border: none;
+    font-size: 40px;
+    line-height: 1;
+    color: #3c373b;
+    cursor: pointer;
+    padding: 0;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+}
+
+.guest-modal-close:hover {
+    transform: scale(1.2);
+    color: #000;
+}
+
+/* Стили для формы */
+.guest-form {
+    padding: 30px;
+}
+
+.form-group {
+    margin-bottom: 25px;
+}
+
+.form-label {
+    display: block;
+    font-family: 'Didot', 'Bodoni', 'Georgia', 'Times New Roman', serif;
+    font-size: 18px;
+    font-weight: 300;
+    color: #3c373b;
+    margin-bottom: 8px;
+    letter-spacing: 1px;
+}
+
+.form-input,
+.form-textarea {
+    width: 100%;
+    padding: 15px 18px;
+    font-family: 'Didot', 'Bodoni', 'Georgia', 'Times New Roman', serif;
+    font-size: 16px;
+    color: #3c373b;
+    border: 1px solid #d0d0d0;
+    border-radius: 15px;
+    box-sizing: border-box;
+    transition: all 0.3s ease;
+    background-color: #f9f9f9;
+}
+
+.form-input:focus,
+.form-textarea:focus {
+    outline: none;
+    border-color: #3c373b;
+    background-color: #ffffff;
+    box-shadow: 0 0 0 3px rgba(60, 55, 59, 0.1);
+}
+
+.form-input::placeholder,
+.form-textarea::placeholder {
+    color: #aaa;
+    font-weight: 200;
+    font-size: 15px;
+}
+
+.form-textarea {
+    resize: vertical;
+    min-height: 100px;
+}
+
+/* Стили для радио-кнопок */
+.radio-group {
+    display: flex;
+    gap: 30px;
+    flex-wrap: wrap;
+}
+
+.radio-label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-family: 'Didot', 'Bodoni', 'Georgia', 'Times New Roman', serif;
+    font-size: 18px;
+    font-weight: 250;
+    color: #3c373b;
+    cursor: pointer;
+}
+
+.radio-label input[type="radio"] {
+    width: 20px;
+    height: 20px;
+    accent-color: #3c373b;
+    cursor: pointer;
+}
+
+/* Кнопки формы */
+.form-actions {
+    display: flex;
+    gap: 15px;
+    margin-top: 35px;
+}
+
+.form-submit,
+.form-cancel {
+    flex: 1;
+    padding: 16px 20px;
+    font-family: 'Didot', 'Bodoni', 'Georgia', 'Times New Roman', serif;
+    font-size: 18px;
+    font-weight: 300;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    border: none;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.form-submit {
+    background-color: #3c373b;
+    color: #ffffff;
+    border: 2px solid #3c373b;
+}
+
+.form-submit:hover {
+    background-color: #ffffff;
+    color: #3c373b;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(60, 55, 59, 0.2);
+}
+
+.form-cancel {
+    background-color: #f0f0f0;
+    color: #3c373b;
+    border: 2px solid #d0d0d0;
+}
+
+.form-cancel:hover {
+    background-color: #e0e0e0;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+/* Адаптация для мобильных устройств */
+@media (max-width: 600px) {
+    .guest-modal-content {
+        margin: 15px auto;
+        width: 95%;
+    }
+    
+    .guest-modal-header {
+        padding: 20px 25px;
+    }
+    
+    .guest-modal-title {
+        font-size: 24px;
+        letter-spacing: 3px;
+    }
+    
+    .guest-modal-close {
+        font-size: 36px;
+    }
+    
+    .guest-form {
+        padding: 25px;
+    }
+    
+    .form-label {
+        font-size: 16px;
+    }
+    
+    .form-input,
+    .form-textarea {
+        padding: 14px 16px;
+        font-size: 15px;
+    }
+    
+    .radio-label {
+        font-size: 16px;
+    }
+    
+    .form-submit,
+    .form-cancel {
+        padding: 14px 15px;
+        font-size: 16px;
+    }
+}
+
+@media (max-width: 400px) {
+    .guest-modal-title {
+        font-size: 20px;
+        letter-spacing: 2px;
+    }
+    
+    .guest-form {
+        padding: 20px;
+    }
+    
+    .form-group {
+        margin-bottom: 20px;
+    }
+    
+    .radio-group {
+        gap: 20px;
+    }
+    
+    .form-actions {
+        flex-direction: column;
+        gap: 10px;
+    }
+    
+    .form-submit,
+    .form-cancel {
+        width: 100%;
+    }
+}
+
+/* Контейнер для фото-заголовка пожеланий */
+.wishes-title-photo {
+    width: 100%;
+    text-align: center;
+    margin-bottom: 40px; /* Такой же отступ, как был у заголовка */
+}
+
+/* Само фото заголовка */
+.wishes-title-img {
+    max-width: 100%;
+    height: auto;
+    display: inline-block;
+}
+
+/* Контейнер для фото-заголовка тайминга */
+.timing-title-photo {
+    width: 100%;
+    text-align: center;
+    margin-bottom: 50px; /* Такой же отступ, как был у заголовка */
+}
+
+/* Само фото заголовка */
+.timing-title-img {
+    width: 180px; /* Задайте нужную ширину */
+    height: auto;
+    display: block;
+    margin: 0 auto; /* Центрирование */
+}
+
+/* Контейнер для фото-заголовка контактов */
+.contacts-title-photo {
+    width: 100%;
+    text-align: center;
+    margin-bottom: 30px; /* Такой же отступ, как был у заголовка */
+}
+
+/* Само фото заголовка */
+.contacts-title-img {
+    width: 180px; /* Задайте нужную ширину */
+    height: auto;
+    display: block;
+    margin: 0 auto; /* Центрирование */
+
+}
+
+/* Удалите или закомментируйте старый стиль .contacts-title */
+/* .contacts-title {
+    ...
+} */
+
+
+/* Отключаем синее выделение при тапе на всех элементах */
+* {
+    -webkit-tap-highlight-color: transparent !important;
+    -webkit-touch-callout: none !important;
+    -webkit-user-select: none !important;
+    -khtml-user-select: none !important;
+    -moz-user-select: none !important;
+    -ms-user-select: none !important;
+    user-select: none !important;
+}
+
+/* Для кнопок и ссылок отдельно (если нужно разрешить выделение текста где-то еще) */
+button,
+a,
+.contact-button,
+.gift-button,
+.guest-button,
+.location-button,
+.wish-arrow,
+.modal-close,
+.form-submit,
+.form-cancel {
+    -webkit-tap-highlight-color: transparent !important;
+    -webkit-touch-callout: none !important;
+    /* Убираем user-select, чтобы текст можно было выделять при необходимости */
+}
+
+/* Для полей ввода (формы) разрешаем выделение и тап */
+input,
+textarea,
+select,
+option,
+.form-input,
+.form-textarea,
+.radio-label {
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0.1) !important; /* Светло-серый вместо синего */
+    -webkit-user-select: text !important;
+    -moz-user-select: text !important;
+    -ms-user-select: text !important;
+    user-select: text !important;
+}
+
+/* Стили для чекбоксов */
+.checkbox-group {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-top: 5px;
+}
+
+.checkbox-label {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-family: 'Didot', 'Bodoni', 'Georgia', 'Times New Roman', serif;
+    font-size: 18px;
+    font-weight: 250;
+    color: #3c373b;
+    cursor: pointer;
+}
+
+.checkbox-label input[type="checkbox"] {
+    width: 20px;
+    height: 20px;
+    accent-color: #3c373b;
+    cursor: pointer;
+}
+
+.form-hint {
+    font-family: 'Didot', 'Bodoni', 'Georgia', 'Times New Roman', serif;
+    font-size: 14px;
+    font-weight: 200;
+    color: #3c373b;
+    opacity: 0.6;
+    margin-top: 8px;
+    font-style: italic;
+}
+
+/* Адаптация для мобильных */
+@media (max-width: 600px) {
+    .checkbox-label {
+        font-size: 16px;
+    }
+    
+    .checkbox-label input[type="checkbox"] {
+        width: 18px;
+        height: 18px;
+    }
+}
+
+@media (max-width: 400px) {
+    .checkbox-group {
+        gap: 12px;
+    }
+    
+    .checkbox-label {
+        font-size: 15px;
+    }
+}

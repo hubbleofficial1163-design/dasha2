@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <!-- Важно для мобильных устройств: масштаб 1:1, запрет зума -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Шесть фото + Таймер</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="gallery">
+        <!-- Первое фото JPG -->
+        <div class="photo-container">
+            <img src="1.jpg" alt="JPG Photo" class="photo">
+        </div>
+        <!-- Второе фото PNG -->
+        <div class="photo-container">
+            <img src="2.PNG" alt="PNG 2" class="photo">
+        </div>
+        <!-- Третье фото PNG -->
+        <div class="photo-container">
+            <img src="3.PNG" alt="PNG 3" class="photo">
+        </div>
+
+        <!-- Секция ЛОКАЦИЯ -->
+        <div class="location-section">
+            <!-- Фото заголовка вместо текста -->
+            <div class="location-title-photo">
+                <img src="loc.png" alt="Location title" class="location-title-img">
+            </div>
+            
+            <div class="location-address">  <br>г. Хабаровск, СТ Остон 104а</div>  
+            <div class="location-time">Сбор гостей — 16:00</div>
+            
+            <!-- Контейнер с фото и кнопкой -->
+            <div class="location-photo-wrapper">
+                <img src="loc.webp" alt="Location photo" class="location-photo">
+                <a href="#" class="location-button">
+                    <span>как<br>добраться</span>
+                </a>
+            </div>
+        </div>
+
+                <!-- Новая секция ТАЙМИНГ -->
+        <div class="timing-section">
+            <div class="timing-title-photo">
+                <img src="66.png" alt="Тайминг" class="timing-title-img">
+            </div>
+            
+            <div class="timing-item">
+                <img src="7.png" alt="Timing icon 1" class="timing-icon">
+                <div class="timing-text">17:00 - фуршет</div>
+            </div>
+            
+            <div class="timing-item">
+                <img src="8.png" alt="Timing icon 2" class="timing-icon">
+                <div class="timing-text">17:30 - церемония</div>
+            </div>
+            
+            <div class="timing-item">
+                <img src="9.png" alt="Timing icon 3" class="timing-icon">
+                <div class="timing-text">18:00 - банкет</div>
+            </div>
+        </div>
+
+        <!-- Четвертое фото PNG -->
+        <div class="photo-container">
+            <img src="4.PNG" alt="PNG 4" class="photo">
+        </div>
+
+        <!-- Пятое фото PNG с таймером -->
+        <div class="photo-container timer-container">
+            <img src="5.PNG" alt="PNG 5" class="photo">
+            <div class="timer-overlay" id="timer">00д 00ч 00м 00с</div>
+        </div>
+
+        <!-- Секция ПОЖЕЛАНИЯ -->
+        <div class="wishes-section">
+                <div class="wishes-title-photo">
+                    <img src="55.PNG" alt="Пожелания" class="wishes-title-img">
+                </div>
+            
+            <div class="wishes-slider">
+                <button class="wish-arrow wish-arrow-left" id="prevWish" aria-label="Предыдущее пожелание">←</button>
+                
+                <div class="wish-container">
+                    <div class="wish-text" id="wishText">
+                        Просим оставить ваших малышей в надежных руках на день торжества. Чтобы вы могли как следует отдохнуть и повеселиться на нашем празднике.
+                    </div>
+                    <div class="wish-counter" id="wishCounter">1/2</div>
+                </div>
+                
+                <button class="wish-arrow wish-arrow-right" id="nextWish" aria-label="Следующее пожелание">→</button>
+            </div>
+
+            <!-- Большая овальная кнопка для списка подарков -->
+            <button class="gift-button" id="giftButton">СМОТРЕТЬ СПИСОК ПОДАРКОВ</button>
+        </div>
+
+        <!-- Новая секция КОНТАКТЫ -->
+        <div class="contacts-section">
+            <div class="contacts-title-photo">
+                <img src="77.png" alt="Контакты" class="contacts-title-img">
+            </div>
+            
+            <div class="contacts-description">
+                По всем вопросам, связанным с мероприятием, Вы можете связаться с нами:
+            </div>
+            
+            <div class="contacts-wrapper">
+                <div class="contact-info">
+                    <div class="contact-name">Дарья</div>
+                    <a href="tel:+79842615074" class="contact-phone">+7 984 261-50-74</a>
+                </div>
+                
+                <a href="tel:+79842615074" class="contact-button">
+                    <span>Связаться</span>
+                </a>
+            </div>
+        </div>
+
+        <!-- Секция АНКЕТА ГОСТЯ -->
+        <div class="guest-section">
+            <h2 class="guest-title">АНКЕТА ГОСТЯ</h2>
+            
+            <div class="guest-description">
+                Пожалуйста, подтвердите свое присутствие на мероприятии до:
+            </div>
+            
+            <div class="guest-date">26 / 06 / 26</div>
+            
+            <button class="guest-button" id="guestConfirmButton">
+                <span>ПОДТВЕРДИТЬ</span>
+            </button>
+        </div>
+
+        <!-- Модальное окно с анкетой гостя -->
+                        <!-- Модальное окно с анкетой гостя -->
+                <div class="guest-modal" id="guestModal">
+                    <div class="guest-modal-content">
+                        <div class="guest-modal-header">
+                            <h3 class="guest-modal-title">АНКЕТА ГОСТЯ</h3>
+                            <button class="guest-modal-close" id="closeGuestModal">&times;</button>
+                        </div>
+                        
+                        <form class="guest-form" id="guestForm">
+                            <div class="form-group">
+                                <label for="fullname" class="form-label">ФИО *</label>
+                                <input type="text" class="form-input" id="fullname" name="fullname" required placeholder="Иванов Иван Иванович">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="phone" class="form-label">Номер телефона *</label>
+                                <input type="tel" class="form-input" id="phone" name="phone" required placeholder="+7 (___) ___-__-__">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label class="form-label">Присутствие *</label>
+                                <div class="radio-group">
+                                    <label class="radio-label">
+                                        <input type="radio" name="attendance" value="present" checked> Буду
+                                    </label>
+                                    <label class="radio-label">
+                                        <input type="radio" name="attendance" value="absent"> Не буду
+                                    </label>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label">Ты планируешь прийти на свадьбу один или с партнером? *</label>
+                                <div class="radio-group">
+                                    <label class="radio-label">
+                                        <input type="radio" name="companion" value="alone" checked> Я буду 1
+                                    </label>
+                                    <label class="radio-label">
+                                        <input type="radio" name="companion" value="plus one"> Я буду +1
+                                    </label>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label">Какие алкогольные напитки предпочитаете?</label>
+                                <div class="checkbox-group">
+                                    <label class="checkbox-label">
+                                        <input type="checkbox" name="alcohol" value="white_wine"> Белое вино
+                                    </label>
+                                    <label class="checkbox-label">
+                                        <input type="checkbox" name="alcohol" value="red_wine"> Красное вино
+                                    </label>
+                                    <label class="checkbox-label">
+                                        <input type="checkbox" name="alcohol" value="vodka"> Водка
+                                    </label>
+                                </div>
+                                <div class="form-hint">Можно выбрать несколько вариантов</div>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="wishes" class="form-label">Пожелания</label>
+                                <textarea class="form-textarea" id="wishes" name="wishes" rows="4" placeholder="Ваши пожелания, комментарии, предпочтения по еде и т.д."></textarea>
+                            </div>
+                            
+                            <div class="form-actions">
+                                <button type="submit" class="form-submit">ОТПРАВИТЬ</button>
+                                <button type="button" class="form-cancel" id="cancelGuestForm">ОТМЕНА</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+        <!-- Шестое фото PNG -->
+        <div class="photo-container">
+            <img src="6.PNG" alt="PNG 6" class="photo">
+        </div>
+    </div>
+
+    <!-- Модальное окно со списком подарков -->
+    <div class="modal" id="giftModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">СПИСОК ПОДАРКОВ</h2>
+                <button class="modal-close" id="closeModal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <ul class="gift-list">
+                    <li class="gift-item">Сертификат в магазин техники</li>
+                    <li class="gift-item">Набор посуды</li>
+                    <li class="gift-item">Постельное белье</li>
+                    <li class="gift-item">Кофемашина</li>
+                    <li class="gift-item">Набор полотенец</li>
+                    <li class="gift-item">Плед</li>
+                    <li class="gift-item">Сертификат в книжный магазин</li>
+                    <li class="gift-item">Набор бокалов</li>
+                    <li class="gift-item">Ваза для цветов</li>
+                    <li class="gift-item">Чайный сервиз</li>
+                    <li class="gift-item">Фотоаппарат</li>
+                    <li class="gift-item">Набор для пикника</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
