@@ -13,6 +13,32 @@ window.addEventListener('load', function() {
 function startTimer() {
     const timerElement = document.getElementById('timer');
     
+    // Создаем структуру таймера один раз
+    timerElement.innerHTML = `
+        <div class="time-unit">
+            <span class="time-number" id="days">00</span>
+            <span class="time-label">дней</span>
+        </div>
+        <div class="time-unit">
+            <span class="time-number" id="hours">00</span>
+            <span class="time-label">часов</span>
+        </div>
+        <div class="time-unit">
+            <span class="time-number" id="minutes">00</span>
+            <span class="time-label">минут</span>
+        </div>
+        <div class="time-unit">
+            <span class="time-number" id="seconds">00</span>
+            <span class="time-label">секунд</span>
+        </div>
+    `;
+    
+    // Получаем ссылки на элементы с цифрами
+    const daysElement = document.getElementById('days');
+    const hoursElement = document.getElementById('hours');
+    const minutesElement = document.getElementById('minutes');
+    const secondsElement = document.getElementById('seconds');
+    
     // Целевая дата: 26 июня 2026 года
     const targetDate = new Date(2026, 5, 26, 0, 0, 0);
     
@@ -21,24 +47,10 @@ function startTimer() {
         const diff = targetDate - now;
         
         if (diff <= 0) {
-            timerElement.innerHTML = `
-                <div class="time-unit">
-                    <span class="time-number">0</span>
-                    <span class="time-label">дней</span>
-                </div>
-                <div class="time-unit">
-                    <span class="time-number">0</span>
-                    <span class="time-label">часов</span>
-                </div>
-                <div class="time-unit">
-                    <span class="time-number">0</span>
-                    <span class="time-label">минут</span>
-                </div>
-                <div class="time-unit">
-                    <span class="time-number">0</span>
-                    <span class="time-label">секунд</span>
-                </div>
-            `;
+            daysElement.textContent = '0';
+            hoursElement.textContent = '0';
+            minutesElement.textContent = '0';
+            secondsElement.textContent = '0';
             return;
         }
         
@@ -47,31 +59,18 @@ function startTimer() {
         const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
         const seconds = Math.floor((diff % (1000 * 60)) / 1000);
         
-        timerElement.innerHTML = `
-            <div class="time-unit">
-                <span class="time-number">${days}</span>
-                <span class="time-label">дней</span>
-            </div>
-            <div class="time-unit">
-                <span class="time-number">${hours}</span>
-                <span class="time-label">часов</span>
-            </div>
-            <div class="time-unit">
-                <span class="time-number">${minutes}</span>
-                <span class="time-label">минут</span>
-            </div>
-            <div class="time-unit">
-                <span class="time-number">${seconds}</span>
-                <span class="time-label">секунд</span>
-            </div>
-        `;
+        // Обновляем только текст, без перерисовки всей структуры
+        daysElement.textContent = days;
+        hoursElement.textContent = hours;
+        minutesElement.textContent = minutes;
+        secondsElement.textContent = seconds;
     }
     
     updateTimer();
     setInterval(updateTimer, 1000);
 }
 
-// Функция для слайдера пожеланий
+// Остальные функции без изменений...
 function initWishesSlider() {
     const wishes = [
         "Просим оставить ваших малышей в надежных руках на день торжества. Чтобы вы могли как следует отдохнуть и повеселиться на нашем празднике.",
@@ -117,7 +116,6 @@ function initWishesSlider() {
     updateWish();
 }
 
-// Инициализация модального окна с анкетой
 function initGuestModal() {
     const modal = document.getElementById('guestModal');
     const guestButton = document.getElementById('guestConfirmButton');
@@ -217,7 +215,6 @@ function initGuestModal() {
     }
 }
 
-// Анимации при скролле
 function initScrollAnimations() {
     const elements = document.querySelectorAll('.photo-container, .location-section, .timing-section, .wishes-section, .contacts-section, .guest-section');
     
